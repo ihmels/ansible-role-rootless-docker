@@ -1,0 +1,3 @@
+---
+rootless_docker_docker_url: "https://master.dockerproject.org/linux/{{ ansible_architecture }}/docker.tgz"
+rootless_docker_rootless_url: "https://master.dockerproject.org/linux/{{ ansible_architecture }}/docker-rootless-extras.tgz"

@@ -1,0 +1,70 @@
+---
+- name: Set channel specific variables.
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ rootless_docker_channel }}.yml"
+    - "default.yml"
+
+- name: Check current Docker version.
+  command: "docker version --format '{{ '{{' }}.Server.Version{{ '}}' }}'"
+  register: docker_current_version
+  changed_when: False
+  failed_when: False
+
+- name: Ensure {{ rootless_docker_install_dir }} exists.
+  file:
+    path: "{{ rootless_docker_install_dir }}"
+    state: directory
+
+- name: Download and install Rootless Docker.
+  block:
+    - name: Create temporary download directory.
+      tempfile:
+        state: directory
+      register: temp_download_dir
+
+    - name: Download Docker and Rootless Docker.
+      get_url:
+        url: "{{ item.url }}"
+        dest: "{{ item.dest }}"
+      loop:
+        - url: "{{ rootless_docker_docker_url }}"
+          dest: "{{ temp_download_dir.path }}/docker.tgz"
+        - url: "{{ rootless_docker_rootless_url }}"
+          dest: "{{ temp_download_dir.path }}/rootless.tgz"
+
+    - name: Install Docker and Rootless Docker.
+      unarchive:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        extra_opts: [--strip-components=1]
+      loop:
+        - src: "{{ temp_download_dir.path }}/docker.tgz"
+          dest: "{{ rootless_docker_install_dir }}"
+        - src: "{{ temp_download_dir.path }}/rootless.tgz"
+          dest: "{{ rootless_docker_install_dir }}"
+      changed_when: True
+      notify: restart docker
+  when: >
+    rootless_docker_channel == 'nightly'
+    or docker_current_version.stdout is not defined
+    or rootless_docker_version not in docker_current_version.stdout
+
+- name: Generate systemd unit file for Rootless Docker.
+  template:
+    src: docker.service.j2
+    dest: "{{ ansible_env.HOME }}/.config/systemd/user/docker.service"
+
+- name: Enable and start Rootless Docker.
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+    scope: user
+    daemon_reload: yes
+
+- name: Add DOCKER_HOST environment variable to ~/.bashrc.
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    regexp: '^export DOCKER_HOST='
+    line: "export DOCKER_HOST=\"unix://{{ ansible_env.XDG_RUNTIME_DIR }}/docker.sock\""

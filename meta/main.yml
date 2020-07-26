@@ -1,0 +1,15 @@
+galaxy_info:
+  role_name: rootless_docker
+  author: Yannick Ihmels <yannick@ihmels.org>
+  description: Install Rootless Docker for a user
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: Fedora
+      versions:
+        - 32
+  galaxy_tags:
+    - docker
+    - containers
+    - rootless
+dependencies: []
