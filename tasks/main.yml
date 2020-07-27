@@ -50,6 +50,11 @@
     or docker_current_version.stdout is not defined
     or rootless_docker_version not in docker_current_version.stdout
 
+- name: Ensure ~/.config/systemd/user exists.
+  file:
+    path: "{{ ansible_env.HOME }}/.config/systemd/user"
+    state: directory
+
 - name: Generate systemd unit file for Rootless Docker.
   template:
     src: docker.service.j2
