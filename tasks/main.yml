@@ -38,6 +38,7 @@
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
         extra_opts: [--strip-components=1]
+        remote_src: yes
       loop:
         - src: "{{ temp_download_dir.path }}/docker.tgz"
           dest: "{{ rootless_docker_install_dir }}"
