@@ -1,7 +1,7 @@
 ---
 # Channel can be one of: 'stable' or 'nightly'
 rootless_docker_channel: 'stable'
-rootless_docker_version: '19.03.12'
+rootless_docker_version: '19.03.14'
 
 rootless_docker_install_dir: "{{ ansible_env.HOME }}/bin"
 rootless_docker_storage_driver: 'vfs'
