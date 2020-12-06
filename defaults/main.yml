@@ -1,5 +1,5 @@
 ---
-# Channel can be one of: 'stable' or 'nightly'
+# Channel can be one of: 'stable', 'test' or 'nightly'
 rootless_docker_channel: 'stable'
 rootless_docker_version: '19.03.14'
 
