@@ -15,6 +15,7 @@
   file:
     path: "{{ rootless_docker_install_dir }}"
     state: directory
+    mode: 755
 
 - name: Download and install Rootless Docker.
   block:
@@ -55,11 +56,13 @@
   file:
     path: "{{ ansible_env.HOME }}/.config/systemd/user"
     state: directory
+    mode: 0644
 
 - name: Generate systemd unit file for Rootless Docker.
   template:
     src: docker.service.j2
     dest: "{{ ansible_env.HOME }}/.config/systemd/user/docker.service"
+    mode: 0644
 
 - name: Enable and start Rootless Docker.
   systemd:
