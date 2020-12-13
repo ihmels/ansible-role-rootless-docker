@@ -15,7 +15,7 @@
   file:
     path: "{{ rootless_docker_install_dir }}"
     state: directory
-    mode: 755
+    mode: 0755
 
 - name: Download and install Rootless Docker.
   block:
