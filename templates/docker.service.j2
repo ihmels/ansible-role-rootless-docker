@@ -4,7 +4,7 @@ Documentation=https://docs.docker.com
 
 [Service]
 Environment=PATH={{ rootless_docker_install_dir }}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ExecStart={{ rootless_docker_install_dir }}/dockerd-rootless.sh --experimental --storage-driver={{ rootless_docker_storage_driver }}
+ExecStart={{ rootless_docker_install_dir }}/dockerd-rootless.sh {{ "--experimental" if rootless_docker_experimental }} --storage-driver={{ rootless_docker_storage_driver }}
 ExecReload=/bin/kill -s HUP $MAINPID
 TimeoutSec=0
 RestartSec=2
