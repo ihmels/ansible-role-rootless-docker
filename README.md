@@ -16,7 +16,7 @@ Available variables are listed below, along with default values (see `defaults/m
 You can control the release channel and the version.
 
     rootless_docker_channel: 'stable'
-    rootless_docker_version: '19.03.12'
+    rootless_docker_version: '20.10.1'
 
 If you set the `rootless_docker_channel` variable to _nightly_, `rootless_docker_version` is ignored.
 
